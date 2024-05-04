@@ -1,0 +1,58 @@
+@model List<CropWIKImvc.Models.Crop>
+
+@{
+    // This is an async lambda expression
+    Func<Task> displayCropsAsync = async () =>
+    {
+        foreach (var crop in Model)
+        {
+            await DisplayCropDataAsync(crop);
+        }
+    };
+
+    // Call the async lambda expression
+    displayCropsAsync();
+}
+
+@functions {
+    async Task DisplayCropDataAsync(CropWIKImvc.Models.Crop crop)
+    
+    {
+        var cropData = new Dictionary<string, object>
+        {
+            { "User", crop.User },
+            { "CropName", crop.CropName },
+            { "CropType", crop.CropType },
+            { "CropVariety", crop.CropVariety },
+            { "PlantingPeriod", crop.PlantingPeriod },
+            { "HarvestingPeriod", crop.HarvestingPeriod },
+            { "Description", crop.Description },
+            { "Image", crop.Image },
+            { "SoilType", crop.SoilType },
+            { "Climate", crop.Climate },
+            { "ItShouldNotBeRepeatedForHowmanyYearsOnSameField", crop.ItShouldNotBeRepeatedForHowmanyYearsOnSameField },
+            { "Fertilizers", crop.Fertilizers },
+            { "Pests", crop.Pests },
+            { "Diseases", crop.Diseases },
+            { "NitrogenSupply", crop.NitrogenSupply },
+            { "NitrogenDemand", crop.NitrogenDemand },
+            { "SoilResidualNitrogen", crop.SoilResidualNitrogen }
+        };
+
+        <p>This is server rendered:</p>
+
+        <div id="cropData">
+            <h2>@(cropData["CropName"])</h2>
+            <p>Type: @(cropData["CropType"])</p>
+            <!-- Add more properties as needed -->
+        </div>
+
+        <p>This is web assembly</p>
+
+        <component type="typeof(CropWIKIWebAssembly.Pages.Counter)" render-mode="WebAssemblyPrerendered" param-CropData="@cropData"></component>
+    }
+}
+
+@section Scripts {
+    <script src="_framework/blazor.webassembly.js"></script>
+}
